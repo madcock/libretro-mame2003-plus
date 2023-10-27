@@ -72,6 +72,17 @@ const struct GameDriver *test_drivers[] =
 
 #else	/* DRIVER_RECURSIVE */
 
+#if defined(SF2000)
+	DRIVER( mslug )
+	DRIVER( mslug2 )
+	DRIVER( mslug3 )
+	DRIVER( mslug4 )
+	DRIVER( mslug5 )
+	DRIVER( mslugx )
+
+	DRIVER( frogger )
+	DRIVER( galaga )	/* (c) 1981 */
+#endif
 #if defined(drv_1942) || defined(core_none)
 	/* 1942.c */
 	DRIVER( 1942 )		/* 12/1984 (c) 1984 */

@@ -901,7 +901,11 @@ static mame_file *generic_fopen(int pathtype, const char *gamename, const char *
 	mame_file file, *newfile;
 	char tempname[256];
 
+#if !defined(SF2000)
 	log_cb(RETRO_LOG_DEBUG, LOGPRE "(generic_fopen) (pathtype:%d, gamename:%s, filename:%s, extension:%s, flags:%X)\n", pathtype, gamename, filename, extension, flags);
+#else
+	log_cb(RETRO_LOG_DEBUG, LOGPRE "(generic_fopen) (pathtype:%d, gamename:%s, filename:%s, extension:%s, flags:%X)\n", pathtype, gamename, filename, extension ? extension : "null", flags);
+#endif
 
 	/* reset the file handle */
 	memset(&file, 0, sizeof(file));

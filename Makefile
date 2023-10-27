@@ -528,6 +528,29 @@ else ifeq ($(platform), miyoo)
 	PLATCFLAGS += -fomit-frame-pointer -march=armv5te -mtune=arm926ej-s -ffast-math
 	CXXFLAGS += -fno-rtti -fno-exceptions
 
+# SF2000
+else ifeq ($(platform), sf2000)
+	TARGET := $(TARGET_NAME)_libretro_$(platform).a
+	MIPS:=/opt/mips32-mti-elf/2019.09-03-2/bin/mips-mti-elf-
+	# MIPS:=EMIT_EXT_INS=1 /home/icemano/x-tools/mipsel-unknown-elf/bin/mips-mti-elf-
+	CC = $(MIPS)gcc
+	AR = $(MIPS)ar
+	CFLAGS = -EL -march=mips32 -mtune=mips32 -msoft-float -ffast-math -fomit-frame-pointer
+	CFLAGS += -G0 -mno-abicalls -fno-pic 
+	CFLAGS += -ffunction-sections -fdata-sections
+	CFLAGS += -I../..
+	CFLAGS += -DSF2000
+	STATIC_LINKING = 1
+
+	INCLUDE_DRV=drv_1942 drv_1943 drv_1945kiii drv_amidar
+	SOUNDS=NAMCO_15XX@ NAMCO_52XX@ NAMCO_54XX@
+	PLATCFLAGS := $(CFLAGS) -std=gnu11 
+	PLATCFLAGS += -Wno-cast-align -Wno-format -Wno-format-security -Wno-discarded-qualifiers -Wno-char-subscripts
+	# PLATCFLAGS += -DUSE_MATH_DEFINES 
+	PLATCFLAGS += $(addprefix -D,$(INCLUDE_DRV)) -DSPLIT_CORE
+	CFLAGS=
+	STATIC_LINKING=1
+
 # Emscripten
 else ifeq ($(platform), emscripten)
 	TARGET := $(TARGET_NAME)_libretro_$(platform).bc
@@ -842,6 +865,17 @@ ifneq (,$(filter $(INCLUDE_DRV),all))
 	include Makefile.common
 else
 	include Makefile.split
+endif
+
+ifeq ($(platform), sf2000)
+	SOURCES_C += $(CORE_DIR)/machine/neogeo_machine.c $(CORE_DIR)/vidhrdw/neogeo_vidhrdw.c $(CORE_DIR)/drivers/neogeo.c
+	SOURCES_C += $(CORE_DIR)/machine/pd4990a.c $(CORE_DIR)/machine/neocrypt.c
+
+	SOURCES_C += $(CORE_DIR)/drivers/frogger.c $(CORE_DIR)/machine/scramble_machine.c $(CORE_DIR)/sndhrdw/scramble_sndhrdw.c \
+		$(CORE_DIR)/drivers/galaxian.c $(CORE_DIR)/vidhrdw/galaxian_vidhrdw.c $(CORE_DIR)/sndhrdw/galaxian_sndhrdw.c
+
+	SOURCES_C += $(CORE_DIR)/drivers/galaga.c $(CORE_DIR)/vidhrdw/galaga_vidhrdw.c $(CORE_DIR)/vidhrdw/xevious_vidhrdw.c
+	SOURCES_C += $(CORE_DIR)/machine/namcoio_machine.c
 endif
 
 # build the targets in different object dirs, since mess changes

@@ -904,11 +904,21 @@ data32_t	cpu_readop_arg32_safe(offs_t offset);
 
 /* ----- unsafe opcode and opcode argument reading ----- */
 #define cpu_readop_unsafe(A)		(OP_ROM[(A) & mem_amask])
+#if !defined(SF2000)
 #define cpu_readop16_unsafe(A)		(*(data16_t *)&OP_ROM[(A) & mem_amask])
 #define cpu_readop32_unsafe(A)		(*(data32_t *)&OP_ROM[(A) & mem_amask])
+#else
+#define cpu_readop16_unsafe(A)		(*(data16_t *)(void *)&OP_ROM[(A) & mem_amask])
+#define cpu_readop32_unsafe(A)		(*(data32_t *)(void *)&OP_ROM[(A) & mem_amask])
+#endif
 #define cpu_readop_arg_unsafe(A)	(OP_RAM[(A) & mem_amask])
+#if !defined(SF2000)
 #define cpu_readop_arg16_unsafe(A)	(*(data16_t *)&OP_RAM[(A) & mem_amask])
 #define cpu_readop_arg32_unsafe(A)	(*(data32_t *)&OP_RAM[(A) & mem_amask])
+#else
+#define cpu_readop_arg16_unsafe(A)	(*(data16_t *)(void *)&OP_RAM[(A) & mem_amask])
+#define cpu_readop_arg32_unsafe(A)	(*(data32_t *)(void *)&OP_RAM[(A) & mem_amask])
+#endif
 
 /* ----- opcode and opcode argument reading ----- */
 void activecpu_set_op_base(unsigned val);
