@@ -2694,6 +2694,16 @@ SOURCES_C += \
 	$(CORE_DIR)/lib/zlib/zutil.c
 endif
 
+ifneq (,$(findstring sf2000,$(platform)))
+SOURCES_C += \
+	$(LIBRETRO_COMM_DIR)/streams/interface_stream.c \
+	$(LIBRETRO_COMM_DIR)/streams/memory_stream.c \
+	$(LIBRETRO_COMM_DIR)/streams/rzip_stream.c \
+	$(LIBRETRO_COMM_DIR)/streams/trans_stream.c \
+	$(LIBRETRO_COMM_DIR)/streams/trans_stream_zlib.c \
+	$(LIBRETRO_COMM_DIR)/utils/md5.c
+endif
+
 ifeq ($(ZLIB_UNCOMPRESS), 1)
 SOURCES_C += \
 	     $(CORE_DIR)/lib/zlib/uncompr.c
